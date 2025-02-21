@@ -366,7 +366,11 @@
               "serviceExternalIPs": {{ _service_external_ips | default([]) }}
             }
           }
-
+    - debug:
+         var: _bgp_config
+    - debug:
+         var: _bgp_config_cmd
+         
     - name: Calico | Process BGP Configuration
       set_fact:
         _bgp_config: "{{ _bgp_config_cmd.stdout | from_json | combine(_bgp_config, recursive=True) }}"
@@ -378,7 +382,9 @@
         cmd: "{{ bin_dir }}/calicoctl.sh apply -f -"
         stdin: "{{ _bgp_config is string | ternary(_bgp_config, _bgp_config | to_json) }}"
       changed_when: false
-
+      when:
+        - inventory_hostname == groups['kube_control_plane']
+        
 - name: Calico | Create calico manifests
   template:
     src: "{{ item.file }}.j2"
