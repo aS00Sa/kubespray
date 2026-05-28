@@ -1,0 +1,10 @@
+---
+# API VIP 155.212.177.145 on ens19 (m1–m3) via Keepalived — вне cluster.yml.
+# Переменные: inventory/k8s01-btnx-dev/group_vars/all/network_public.yml
+# Запуск: bash scripts/run-k8s01-keepalived.sh
+- name: k8s01-btnx-dev API VIP (Keepalived)
+  hosts: kube_control_plane
+  gather_facts: false
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  roles:
+    - role: keepalived

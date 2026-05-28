@@ -1,0 +1,45 @@
+---
+# Архитектура k8s01-btnx-dev
+#
+# === Фаза 1 (готово) — Kubernetes через Kubespray ===
+#   3× CP (192.168.25.61–63) + 3× worker (64–66), Calico, NodePort 4000–6999.
+#
+# === Фаза 2 — публичные IP (вне одного playbook) ===
+#
+# Публичная L2: интерфейс ens19 на m1–m3 и w1–w3 (переменные: network_public.yml).
+# Внутренняя сеть кластера — другой NIC, 192.168.25.x (ansible_host в inventory.ini).
+#
+# API / kubectl / cert-manager (VIP master):
+#   155.212.177.145 — Keepalived на m1/m2/m3, interface ens19 (systemd, вне Kubespray).
+#   На каждом master уже есть локальный haproxy (127.0.0.1:6443 → apiserver на 25.x).
+#   Keepalived: VIP .145/32 на ens19 активного master → 127.0.0.1:6443.
+#   kube-vip (Kubespray) на тот же .145 НЕ включать — один VIP, один механизм.
+#   SAN apiserver + kubeconfig: loadbalancer_apiserver.address в group_vars/all/all.yml.
+#   Если cluster.yml прошёл без .145 в SAN — обновить сертификаты (см. ниже) до cert-manager.
+#
+# Приложения / edge (workers):
+#   Публичные IP на ens19: .146 (w2), .147 (w3), .148 (w1).
+#   Internet → edge HAProxy → 155.212.177.146|.147|.148 :NodePort (4000–6999) → Pod
+#   Соответствие (access_ip в inventory.ini):
+#     w2 → .146, w3 → .147, w1 → .148
+#   MetalLB (Kubespray addons): пул L2 из тех же /32 на speaker только на workers.
+#   Не вешать .146–.148 одновременно в netplan И в MetalLB на одном интерфейсе:
+#     либо статика на NIC + NodePort (фаза 1),
+#     либо снять статику с NIC и отдать IP пулу MetalLB для type=LoadBalancer.
+#
+# Порядок фазы 2:
+#   1) all.yml: loadbalancer_apiserver 145 + haproxy localhost (если ещё закомментировано).
+#   2) При необходимости: playbook с обновлением apiserver SAN / kubeadm certs renew.
+#   3) bash scripts/run-k8s01-keepalived.sh  (VIP .145 на ens19, m1–m3)
+#      проверка: curl -k https://155.212.177.145:6443/healthz
+#   4) addons.yml: cert_manager_enabled: true → cluster.yml --tags cert-manager
+#   5) addons.yml: metallb_enabled: true + metallb_config (146–148) → --tags metallb
+#      (kube_proxy_strict_arp уже привязан к metallb_enabled в k8s-cluster.yml)
+#
+# Если установка «поехала»:
+#   bash scripts/run-k8s01-reset.sh
+#   bash scripts/run-k8s01-cluster-install.sh
+#
+# Логи:
+#   inventory-k8s01-btnx-dev-reset-YYYYMMDD-HHMM.log
+#   inventory-k8s01-btnx-dev-cluster-YYYYMMDD-HHMM.log

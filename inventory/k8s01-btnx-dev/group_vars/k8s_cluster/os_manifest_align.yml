@@ -1,0 +1,10 @@
+---
+# Выравнивание ОС перед Kubespray (playbooks/k8s-os-manifest-align.yml).
+os_manifest_cluster_name: k8s01-btnx-dev
+os_manifest_url: "https://cloud-images.ubuntu.com/noble/20260217/noble-server-cloudimg-amd64.manifest"
+os_manifest_kernel_version: "6.8.0-100"
+os_manifest_cleanup_k8s_leftovers: true
+os_manifest_install_missing: true
+os_manifest_reboot: true
+os_manifest_serial: 1
+os_manifest_align_hosts: "kube_control_plane:kube_node"

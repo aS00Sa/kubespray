@@ -1,0 +1,26 @@
+---
+# Публичная сеть (белые IP) — интерфейс ens19 на всех нодах кластера.
+# Внутренняя связность Kubespray: ansible_host / ip = 192.168.25.x (другой интерфейс).
+#
+# Masters: на ens19 только VIP .145 через Keepalived (не статика на всех CP).
+# Workers: на ens19 статика .146 / .147 / .148 (см. access_ip в inventory.ini).
+
+k8s01_public_interface: ens19
+
+k8s01_api_vip: 155.212.177.145
+k8s01_api_vip_cidr: 32
+
+# Keepalived (фаза 2): bash scripts/run-k8s01-keepalived.sh
+k8s01_keepalived_interface: "{{ k8s01_public_interface }}"
+k8s01_keepalived_vip: "{{ k8s01_api_vip }}"
+k8s01_keepalived_vip_cidr: "{{ k8s01_api_vip_cidr }}"
+# VRRP unicast — ip из inventory.ini (192.168.25.61–63), VIP только на ens19
+k8s01_keepalived_virtual_router_id: 51
+k8s01_keepalived_master_priority: 150
+k8s01_keepalived_priority_step: 10
+
+# Workers — публичный IP на ens19 (MetalLB L2 или статика netplan)
+k8s01_worker_public_ips:
+  k8s01-btnx-dev-w1: 155.212.177.148
+  k8s01-btnx-dev-w2: 155.212.177.146
+  k8s01-btnx-dev-w3: 155.212.177.147
