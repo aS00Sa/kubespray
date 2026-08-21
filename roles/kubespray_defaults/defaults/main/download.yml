@@ -116,7 +116,7 @@ flannel_version: 0.28.4
 flannel_cni_version: 1.7.1-flannel1
 cni_version: "{{ (cni_binary_checksums['amd64'] | dict2items)[0].key }}"
 
-cilium_version: "1.19.4"
+cilium_version: "1.20.1"
 cilium_cli_version: "{{ (ciliumcli_binary_checksums['amd64'] | dict2items)[0].key }}"
 cilium_enable_hubble: false
 
@@ -161,17 +161,17 @@ cni_download_url: "{{ github_url }}/containernetworking/plugins/releases/downloa
 calicoctl_download_url: "{{ github_url }}/projectcalico/calico/releases/download/v{{ calico_ctl_version }}/calicoctl-linux-{{ image_arch }}"
 calico_crds_download_url: "{{ github_url }}/projectcalico/calico/raw/v{{ calico_version }}/manifests/crds.yaml"
 ciliumcli_download_url: "{{ github_url }}/cilium/cilium-cli/releases/download/v{{ cilium_cli_version }}/cilium-linux-{{ image_arch }}.tar.gz"
-crictl_download_url: "{{ github_url }}/kubernetes-sigs/cri-tools/releases/download/v{{ crictl_version }}/crictl-v{{ crictl_version }}-{{ ansible_system | lower }}-{{ image_arch }}.tar.gz"
+crictl_download_url: "{{ github_url }}/kubernetes-sigs/cri-tools/releases/download/v{{ crictl_version }}/crictl-v{{ crictl_version }}-{{ ansible_facts['system'] | lower }}-{{ image_arch }}.tar.gz"
 crio_download_url: "{{ storage_googleapis_url }}/cri-o/artifacts/cri-o.{{ image_arch }}.v{{ crio_version }}.tar.gz"
 helm_download_url: "{{ get_helm_url }}/helm-v{{ helm_version }}-linux-{{ image_arch }}.tar.gz"
 runc_download_url: "{{ github_url }}/opencontainers/runc/releases/download/v{{ runc_version }}/runc.{{ image_arch }}"
 crun_download_url: "{{ github_url }}/containers/crun/releases/download/{{ crun_version }}/crun-{{ crun_version }}-linux-{{ image_arch }}"
-youki_download_url: "{{ github_url }}/youki-dev/youki/releases/download/v{{ youki_version }}/youki-{{ youki_version }}-{{ ansible_architecture }}-gnu.tar.gz"
-kata_containers_download_url: "{{ github_url }}/kata-containers/kata-containers/releases/download/{{ kata_containers_version }}/kata-static-{{ kata_containers_version }}-{{ image_arch }}.tar.xz"
+youki_download_url: "{{ github_url }}/youki-dev/youki/releases/download/v{{ youki_version }}/youki-{{ youki_version }}-{{ ansible_facts['architecture'] }}-gnu.tar.gz"
+kata_containers_download_url: "{{ github_url }}/kata-containers/kata-containers/releases/download/{{ kata_containers_version }}/kata-static-{{ kata_containers_version }}-{{ image_arch }}.tar.zst"
 # gVisor only supports amd64 and uses x86_64 to in the download link
-gvisor_runsc_download_url: "{{ storage_googleapis_url }}/gvisor/releases/release/{{ gvisor_version }}/{{ ansible_architecture }}/runsc"
-gvisor_containerd_shim_runsc_download_url: "{{ storage_googleapis_url }}/gvisor/releases/release/{{ gvisor_version }}/{{ ansible_architecture }}/containerd-shim-runsc-v1"
-nerdctl_download_url: "{{ github_url }}/containerd/nerdctl/releases/download/v{{ nerdctl_version }}/nerdctl-{{ nerdctl_version }}-{{ ansible_system | lower }}-{{ image_arch }}.tar.gz"
+gvisor_runsc_download_url: "{{ storage_googleapis_url }}/gvisor/releases/release/{{ gvisor_version }}/{{ ansible_facts['architecture'] }}/runsc"
+gvisor_containerd_shim_runsc_download_url: "{{ storage_googleapis_url }}/gvisor/releases/release/{{ gvisor_version }}/{{ ansible_facts['architecture'] }}/containerd-shim-runsc-v1"
+nerdctl_download_url: "{{ github_url }}/containerd/nerdctl/releases/download/v{{ nerdctl_version }}/nerdctl-{{ nerdctl_version }}-{{ ansible_facts['system'] | lower }}-{{ image_arch }}.tar.gz"
 containerd_download_url: "{{ github_url }}/containerd/containerd/releases/download/v{{ containerd_version }}/containerd-{{ 'static-' if containerd_static_binary }}{{ containerd_version }}-linux-{{ image_arch }}.tar.gz"
 cri_dockerd_download_url: "{{ github_url }}/Mirantis/cri-dockerd/releases/download/v{{ cri_dockerd_version }}/cri-dockerd-{{ cri_dockerd_version }}.{{ image_arch }}.tgz"
 skopeo_download_url: "{{ github_url }}/lework/skopeo-binary/releases/download/v{{ skopeo_version }}/skopeo-linux-{{ image_arch }}"
@@ -238,14 +238,14 @@ cilium_operator_image_repo: "{{ quay_image_repo }}/cilium/operator"
 cilium_operator_image_tag: "v{{ cilium_version }}"
 cilium_hubble_relay_image_repo: "{{ quay_image_repo }}/cilium/hubble-relay"
 cilium_hubble_relay_image_tag: "v{{ cilium_version }}"
-cilium_hubble_certgen_image_repo: "{{ quay_image_repo }}/cilium/certgen"
-cilium_hubble_certgen_image_tag: "v0.4.3"
+cilium_certgen_image_repo: "{{ quay_image_repo }}/cilium/certgen"
+cilium_certgen_image_tag: "v0.4.9"
 cilium_hubble_ui_image_repo: "{{ quay_image_repo }}/cilium/hubble-ui"
 cilium_hubble_ui_image_tag: "v0.13.5"
 cilium_hubble_ui_backend_image_repo: "{{ quay_image_repo }}/cilium/hubble-ui-backend"
 cilium_hubble_ui_backend_image_tag: "v0.13.5"
-cilium_hubble_envoy_image_repo: "{{ quay_image_repo }}/cilium/cilium-envoy"
-cilium_hubble_envoy_image_tag: "v1.37.2-1778236003-7c2f6580d32e50f1a6866c12122662856f54eec2"
+cilium_envoy_image_repo: "{{ quay_image_repo }}/cilium/cilium-envoy"
+cilium_envoy_image_tag: "v1.37.5-1786810558-766ccfb37260a43e9d228837aa84ce3faf9f64e7"
 kube_ovn_container_image_repo: "{{ docker_image_repo }}/kubeovn/kube-ovn"
 kube_ovn_container_image_tag: "v{{ kube_ovn_version }}"
 kube_ovn_vpc_container_image_repo: "{{ docker_image_repo }}/kubeovn/vpc-nat-gateway"
@@ -314,13 +314,13 @@ cert_manager_webhook_image_repo: "{{ quay_image_repo }}/jetstack/cert-manager-we
 cert_manager_webhook_image_tag: "v{{ cert_manager_version }}"
 
 csi_attacher_image_repo: "{{ kube_image_repo }}/sig-storage/csi-attacher"
-csi_attacher_image_tag: "v4.4.2"
+csi_attacher_image_tag: "v4.5.1"
 csi_provisioner_image_repo: "{{ kube_image_repo }}/sig-storage/csi-provisioner"
-csi_provisioner_image_tag: "v3.6.2"
+csi_provisioner_image_tag: "v4.0.1"
 csi_snapshotter_image_repo: "{{ kube_image_repo }}/sig-storage/csi-snapshotter"
-csi_snapshotter_image_tag: "v6.3.2"
+csi_snapshotter_image_tag: "v7.0.2"
 csi_resizer_image_repo: "{{ kube_image_repo }}/sig-storage/csi-resizer"
-csi_resizer_image_tag: "v1.9.2"
+csi_resizer_image_tag: "v1.10.1"
 csi_node_driver_registrar_image_repo: "{{ kube_image_repo }}/sig-storage/csi-node-driver-registrar"
 csi_node_driver_registrar_image_tag: "v2.4.0"
 csi_livenessprobe_image_repo: "{{ kube_image_repo }}/sig-storage/livenessprobe"
@@ -491,7 +491,7 @@ downloads:
   youki:
     file: true
     enabled: "{{ youki_enabled }}"
-    dest: "{{ local_release_dir }}/youki-{{ youki_version }}-{{ ansible_architecture }}.tar.gz"
+    dest: "{{ local_release_dir }}/youki-{{ youki_version }}-{{ ansible_facts['architecture'] }}.tar.gz"
     checksum: "{{ youki_archive_checksum }}"
     url: "{{ youki_download_url }}"
     unarchive: true
@@ -515,7 +515,7 @@ downloads:
   kata_containers:
     enabled: "{{ kata_containers_enabled }}"
     file: true
-    dest: "{{ local_release_dir }}/kata-static-{{ kata_containers_version }}-{{ image_arch }}.tar.xz"
+    dest: "{{ local_release_dir }}/kata-static-{{ kata_containers_version }}-{{ image_arch }}.tar.zst"
     checksum: "{{ kata_containers_binary_checksum }}"
     url: "{{ kata_containers_download_url }}"
     unarchive: false
@@ -539,7 +539,7 @@ downloads:
   gvisor_runsc:
     enabled: "{{ gvisor_enabled }}"
     file: true
-    dest: "{{ local_release_dir }}/gvisor-runsc-{{ gvisor_version }}-{{ ansible_architecture }}"
+    dest: "{{ local_release_dir }}/gvisor-runsc-{{ gvisor_version }}-{{ ansible_facts['architecture'] }}"
     checksum: "{{ gvisor_runsc_binary_checksum }}"
     url: "{{ gvisor_runsc_download_url }}"
     unarchive: false
@@ -551,7 +551,7 @@ downloads:
   gvisor_containerd_shim:
     enabled: "{{ gvisor_enabled }}"
     file: true
-    dest: "{{ local_release_dir }}/gvisor-containerd-shim-runsc-v1-{{ gvisor_version }}-{{ ansible_architecture }}"
+    dest: "{{ local_release_dir }}/gvisor-containerd-shim-runsc-v1-{{ gvisor_version }}-{{ ansible_facts['architecture'] }}"
     checksum: "{{ gvisor_containerd_shim_binary_checksum }}"
     url: "{{ gvisor_containerd_shim_runsc_download_url }}"
     unarchive: false
@@ -596,7 +596,7 @@ downloads:
   cilium_operator:
     enabled: "{{ kube_network_plugin == 'cilium' or cilium_deploy_additionally }}"
     container: true
-    repo: "{{ cilium_operator_image_repo }}"
+    repo: "{{ cilium_operator_image_repo }}-generic"
     tag: "{{ cilium_operator_image_tag }}"
     checksum: "{{ cilium_operator_digest_checksum | default(None) }}"
     groups:
@@ -611,12 +611,12 @@ downloads:
     groups:
       - k8s_cluster
 
-  cilium_hubble_certgen:
-    enabled: "{{ cilium_enable_hubble }}"
+  cilium_certgen:
+    enabled: "{{ kube_network_plugin == 'cilium' }}"
     container: true
-    repo: "{{ cilium_hubble_certgen_image_repo }}"
-    tag: "{{ cilium_hubble_certgen_image_tag }}"
-    checksum: "{{ cilium_hubble_certgen_digest_checksum | default(None) }}"
+    repo: "{{ cilium_certgen_image_repo }}"
+    tag: "{{ cilium_certgen_image_tag }}"
+    checksum: "{{ cilium_certgen_digest_checksum | default(None) }}"
     groups:
       - k8s_cluster
 
@@ -638,12 +638,12 @@ downloads:
     groups:
       - k8s_cluster
 
-  cilium_hubble_envoy:
-    enabled: "{{ cilium_enable_hubble }}"
+  cilium_envoy:
+    enabled: "{{ kube_network_plugin == 'cilium' }}"
     container: true
-    repo: "{{ cilium_hubble_envoy_image_repo }}"
-    tag: "{{ cilium_hubble_envoy_image_tag }}"
-    checksum: "{{ cilium_hubble_envoy_digest_checksum | default(None) }}"
+    repo: "{{ cilium_envoy_image_repo }}"
+    tag: "{{ cilium_envoy_image_tag }}"
+    checksum: "{{ cilium_envoy_digest_checksum | default(None) }}"
     groups:
       - k8s_cluster
 

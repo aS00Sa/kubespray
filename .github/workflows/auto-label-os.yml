@@ -13,7 +13,7 @@ jobs:
       issues: write
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Parse issue form
         uses: stefanbuck/github-issue-parser@cb6e97157cbf851e3a393ff8d57c93a484cc323f
@@ -21,12 +21,9 @@ jobs:
         with:
           template-path: .github/ISSUE_TEMPLATE/bug-report.yaml
 
-      - name: Set labels based on OS field
+      - name: Set labels based on allowed OS values
         uses: redhat-plumbers-in-action/advanced-issue-labeler@b80ae64e3e156e9c111b075bfa04b295d54e8e2e
         with:
           issue-form: ${{ steps.issue-parser.outputs.jsonString }}
-          section: os
-          block-list: |
-            None
-            Other
+          config-path: .github/advanced-issue-labeler.yml
           token: ${{ secrets.GITHUB_TOKEN }}

@@ -111,15 +111,15 @@ Note:
 <!-- BEGIN ANSIBLE MANAGED BLOCK -->
 
 - Core
-  - [kubernetes](https://github.com/kubernetes/kubernetes) 1.36.1
-  - [etcd](https://github.com/etcd-io/etcd) 3.6.11
+  - [kubernetes](https://github.com/kubernetes/kubernetes) 1.36.4
+  - [etcd](https://github.com/etcd-io/etcd) 3.6.14
   - [docker](https://www.docker.com/) 28.3
-  - [containerd](https://containerd.io/) 2.2.3
-  - [cri-o](https://cri-o.io/) 1.36.0 (experimental: see [CRI-O Note](docs/CRI/cri-o.md). Only on fedora, ubuntu and centos based OS)
+  - [containerd](https://containerd.io/) 2.3.4
+  - [cri-o](https://cri-o.io/) 1.36.3 (experimental: see [CRI-O Note](docs/CRI/cri-o.md). Only on fedora, ubuntu and centos based OS)
 - Network Plugin
   - [cni-plugins](https://github.com/containernetworking/plugins) 1.9.1
-  - [calico](https://github.com/projectcalico/calico) 3.31.5
-  - [cilium](https://github.com/cilium/cilium) 1.19.4
+  - [calico](https://github.com/projectcalico/calico) 3.31.7
+  - [cilium](https://github.com/cilium/cilium) 1.20.1
   - [flannel](https://github.com/flannel-io/flannel) 0.28.4
   - [kube-ovn](https://github.com/alauda/kube-ovn) 1.12.21
   - [kube-router](https://github.com/cloudnativelabs/kube-router) 2.1.1
@@ -145,11 +145,12 @@ Note:
 
 ## Container Runtime Notes
 
-- The cri-o version should be aligned with the respective kubernetes version (i.e. kube_version=1.20.x, crio_version=1.20)
+- The CRI-O minor version should match the Kubernetes minor version.
 
 ## Requirements
 
-- **Minimum required version of Kubernetes is v1.30**
+- **Minimum required version of Kubernetes is v1.34.0**
+
 - **Ansible v2.14+, Jinja 2.11+ and python-netaddr is installed on the machine that will run Ansible commands**
 - The target servers must have **access to the Internet** in order to pull docker images. Otherwise, additional configuration is required (See [Offline Environment](docs/operations/offline-environment.md))
 - The target servers are configured to allow **IPv4 forwarding**.
